@@ -1,14 +1,17 @@
 public class SemDatabase {
     private int worldSize;
     private BST<Integer, Seminar> binSearchTreeID = new BST<Integer, Seminar>();
-    private BST<Integer, Seminar> binSearchTreeLoc = new BST<Integer, Seminar>();
-    private BST<Integer, Seminar> binSearchTreeCost = new BST<Integer, Seminar>();
+    private BST<Integer, Seminar> binSearchTreeLoc =
+        new BST<Integer, Seminar>();
+    private BST<Integer, Seminar> binSearchTreeCost =
+        new BST<Integer, Seminar>();
     private BST<String, Seminar> binSearchTreeDate = new BST<String, Seminar>();
     private BST<String, Seminar> binSearchTreeKey = new BST<String, Seminar>();
-    
+
     public SemDatabase(int w) {
         worldSize = w;
     }
+
 
     public void insert(Seminar sem) {
         binSearchTreeID.idInsert(sem.id(), sem);
@@ -16,7 +19,8 @@ public class SemDatabase {
         binSearchTreeDate.insert(sem.date(), sem);
         binSearchTreeKey.insert(sem.keywords().toString(), sem);
     }
-    
+
+
     public Seminar searchID(int key) {
         if (binSearchTreeID.find(key) == null) {
             return null;
@@ -25,31 +29,9 @@ public class SemDatabase {
     }
 
 
-    public Seminar[] searchCost(int low, int high) {
+    public String searchCost(int low, int high) {
         
-        int retArraySize = 0;
-        int y = 0;
-        int dupCounter;
-        for (int i = low; i<= high; i++) {
-            //Seminar checkSem = binSearchTreeCost.find(i).value().value();
-            if (binSearchTreeCost.find(i) != null) {
-                dupCounter = binSearchTreeCost.isDuplicate(binSearchTreeCost.find(i));
-                while (dupCounter > 0) {
-                    retArraySize++;
-                    dupCounter--;
-                }
-            }
-        }
-        Seminar[] semArray = new Seminar[retArraySize];
-        
-        for (int i = low; i<= high; i++) {
-            //Seminar checkSem = binSearchTreeCost.find(i).value().value();
-            while (binSearchTreeCost.find(i) != null) {
-                semArray[y] = binSearchTreeCost.find(i).value().value();;
-                y++;
-            }
-        }
-        return semArray;
+        return binSearchTreeCost.findDupCost(binSearchTreeCost.getRoot(), new BST<Integer, Seminar>(), low, high);
     }
 
 
@@ -59,7 +41,7 @@ public class SemDatabase {
 
 
     public void searchLocation(int x, int y, double r) {
-        
+
     }
 
 

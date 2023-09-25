@@ -11,6 +11,11 @@ public class BST<K extends Comparable<K>, E> {
     }
 
 
+    public BSTNode<KVPair<K, E>> getRoot() {
+        return root;
+    }
+
+
     private BSTNode<KVPair<K, E>> findHelp(
         BSTNode<KVPair<K, E>> compareNode,
         K e) {
@@ -61,6 +66,8 @@ public class BST<K extends Comparable<K>, E> {
 
 
     private void insertHelp(BSTNode<KVPair<K, E>> root, K e, E sem) {
+        BSTNode<KVPair<K, E>> rootLeftRight = new BSTNode<KVPair<K, E>>();
+        ;
         if (root == null) {
             root = new BSTNode<KVPair<K, E>>();
         }
@@ -71,10 +78,12 @@ public class BST<K extends Comparable<K>, E> {
         }
         else if (root.value().compareTo(e) == 0 || root.value().compareTo(
             e) > 0) {
-            insertHelp(root.left(), e, sem);
+            root.setLeft(rootLeftRight);
+            insertHelp(rootLeftRight, e, sem);
         }
         else {
-            insertHelp(root.right(), e, sem);
+            root.setRight(rootLeftRight);
+            insertHelp(rootLeftRight, e, sem);
         }
     }
 
@@ -153,17 +162,87 @@ public class BST<K extends Comparable<K>, E> {
     public BSTNode<KVPair<K, E>> findKeyword(String key) {
         return findKeywordHelp(root, key);
     }
-    
+
+
     public int isDuplicate(BSTNode<KVPair<K, E>> isSameNode) {
-        if (isSameNode.left() == null) {
-            return 0;
-        }
-        BSTNode<KVPair<K, E>> leftNode = isSameNode.left();
-        if (isSameNode.value().key() == leftNode.value().key()) {
-            return 1 + isDuplicate(leftNode);
-        }
-        else {
-            return 0;
-        }
+        return isSameNode.duplicateCount();
     }
+
+
+    public int getNodeCount() {
+        return nodeCount;
+    }
+
+
+    public String preOrderTraverseToString(
+        BSTNode<KVPair<K, E>> root,
+        String retString,
+        int index) {
+
+        if (root == null) {
+            return "";
+        }
+        retString += root.value().value().toString() + "\n"
+            + preOrderTraverseToString(root.left(), retString, index++)
+            + preOrderTraverseToString(root.right(), retString, index++);
+        return retString;
+    }
+
+// public BST findDupExact(BSTNode<KVPair<K, E>> compareNode,
+// K e) {
+//
+// if (compareNode == null || compareNode.value() == null) {
+// return null;
+// }
+// if (compareNode.value().compareTo(e) == 0) {
+// duplicateTree.insert(e, compareNode.value().value());
+// findDupExact(compareNode.left(), e);
+// findDupExact(compareNode.right(), e);
+// }
+// else if (compareNode.value().compareTo(e) < 0) {
+// findDupExact(compareNode.left(), e);
+// }
+//
+// else if (compareNode.value().compareTo(e) > 0) {
+// findDupExact(compareNode.right(), e);
+// }
+// return null;
+// }
+
+
+    public String findDupCost(
+        BSTNode<KVPair<K, E>> compareNode,
+        BST<K, E> duplicateTree,
+        K low,
+        K high) {
+        if (compareNode == null || compareNode.value() == null) {
+            return null;
+        }
+        if (compareNode.value().compareTo(low) == 0) {
+            duplicateTree.insert(compareNode.value().key(), compareNode.value()
+                .value());
+            findDupCost(compareNode.left(), duplicateTree, low, high);
+            findDupCost(compareNode.right(), duplicateTree, low, high);
+        }
+        else if (compareNode.value().compareTo(high) == 0) {
+            duplicateTree.insert(compareNode.value().key(), compareNode.value()
+                .value());
+            findDupCost(compareNode.left(), duplicateTree, low, high);
+        }
+        else if (compareNode.value().compareTo(high) < 0 && compareNode.value()
+            .compareTo(low) > 0) {
+            duplicateTree.insert(compareNode.value().key(), compareNode.value()
+                .value());
+            findDupCost(compareNode.left(), duplicateTree, low, high);
+            findDupCost(compareNode.right(), duplicateTree, low, high);
+        }
+
+        else if (compareNode.value().compareTo(high) > 0 || compareNode.value()
+            .compareTo(low) < 0) {
+            findDupCost(compareNode.left(), duplicateTree, low, high);
+        }
+        return duplicateTree.preOrderTraverseToString(duplicateTree.getRoot(),
+            "", 0);
+    }
+
 }

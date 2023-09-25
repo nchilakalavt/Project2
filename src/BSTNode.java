@@ -3,10 +3,13 @@ public class BSTNode<E extends Comparable<? super E>> {
     private E element;
     private BSTNode left; // Pointer to left child
     private BSTNode right; // Pointer to right child
+    private int duplicateCount = 1;
+    private Object[] duplicateArray = new Object[duplicateCount];
 
     // Constructors
     BSTNode() {
         left = right = null;
+        
     }
 
 
@@ -46,7 +49,7 @@ public class BSTNode<E extends Comparable<? super E>> {
     public BSTNode left() {
         return left;
     }
-
+    
 
     public void setLeft(BSTNode p) {
         left = p;
@@ -68,4 +71,17 @@ public class BSTNode<E extends Comparable<? super E>> {
     public boolean isLeaf() {
         return (left == null) && (right == null);
     }
+    
+    public int duplicateCount() {
+        return duplicateCount;
+    }
+    
+    public void incrementDuplicateCount() {
+        duplicateCount += 1;
+    }
+    
+    public Object[] getDuplicates() {
+        return duplicateArray;
+    }
+    
 }
