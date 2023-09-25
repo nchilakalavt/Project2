@@ -33,7 +33,6 @@ public class SemDatabaseTest extends TestCase {
         semD.insert(mysem3);
         semD.insert(mysem10);
         Seminar[] semArr = { mysem1, mysem2, mysem3, mysem10 };
-        System.out.println();
         System.out.println(semD.searchCost(10, 15));
     }
     

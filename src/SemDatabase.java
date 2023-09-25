@@ -78,4 +78,8 @@ public class SemDatabase {
     public void printID() {
 
     }
+    
+    public String treeToString() {
+        return binSearchTreeCost.preOrderTraverseToString(binSearchTreeCost.getRoot(), "", 0);
+    }
 }
