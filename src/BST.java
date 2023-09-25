@@ -2,30 +2,30 @@
 // Binary Search Tree implementation
 public class BST<K extends Comparable<K>, E> {
     private BSTNode<KVPair<K, E>> root;// Root of the BST
-    private int nodecount; // Number of nodes in the BST
+    private int nodeCount; // Number of nodes in the BST
 
     // constructor
     BST() {
-        root = null;
-        nodecount = 0;
+        root = new BSTNode<KVPair<K, E>>();
+        nodeCount = 0;
     }
 
 
     private BSTNode<KVPair<K, E>> findHelp(
-        BSTNode<KVPair<K, E>> removeNode,
+        BSTNode<KVPair<K, E>> compareNode,
         K e) {
-        if (root == null) {
+        if (compareNode == null || compareNode.value() == null) {
             return null;
         }
-        if (e.compareTo(root.value().key()) == 0) {
-            return root;
+        if (compareNode.value().compareTo(e) == 0) {
+            return compareNode;
         }
-        else if (e.compareTo(root.value().key()) < 0) {
-            findHelp(root.left(), e);
+        else if (compareNode.value().compareTo(e) < 0) {
+            findHelp(compareNode.left(), e);
         }
 
-        else if (e.compareTo(root.value().key()) > 0) {
-            findHelp(root.right(), e);
+        else if (compareNode.value().compareTo(e) > 0) {
+            findHelp(compareNode.right(), e);
         }
         return null;
     }
@@ -60,16 +60,21 @@ public class BST<K extends Comparable<K>, E> {
     }
 
 
-    private void insertHelp(BSTNode<KVPair<K, E>> root, K e) {
+    private void insertHelp(BSTNode<KVPair<K, E>> root, K e, E sem) {
         if (root == null) {
-            root.setValue(e);
+            root = new BSTNode<KVPair<K, E>>();
         }
-        else if (e.compareTo(root.value().key()) == 0 || e.compareTo(root
-            .value().key()) < 0) {
-            insertHelp(root.left(), e);
+        if (root.value() == null) {
+            root.setValue(new KVPair<K, E>());
+            root.value().setKey(e);
+            root.value().setVal(sem);
+        }
+        else if (root.value().compareTo(e) == 0 || root.value().compareTo(
+            e) > 0) {
+            insertHelp(root.left(), e, sem);
         }
         else {
-            insertHelp(root.right(), e);
+            insertHelp(root.right(), e, sem);
         }
     }
 
@@ -77,16 +82,16 @@ public class BST<K extends Comparable<K>, E> {
     // Reinitialize tree
     public void clear() {
         root = null;
-        nodecount = 0;
+        nodeCount = 0;
     }
 
 
     // Insert a record into the tree.
     // Records can be anything, but they must be Comparable
     // e: The record to insert.
-    public void insert(K e) {
-        insertHelp(root, e);
-        nodecount++;
+    public void insert(K e, E sem) {
+        insertHelp(root, e, sem);
+        nodeCount++;
     }
 
 
@@ -97,7 +102,7 @@ public class BST<K extends Comparable<K>, E> {
         BSTNode<KVPair<K, E>> temp = findHelp(root, key); // First find it
         if (temp != null) {
             removeHelp(temp); // Now remove it
-            nodecount--;
+            nodeCount--;
         }
         return temp;
     }
@@ -112,6 +117,53 @@ public class BST<K extends Comparable<K>, E> {
 
     // Return the number of records in the dictionary
     public int size() {
-        return nodecount;
+        return nodeCount;
+    }
+
+
+    public void idInsert(K e, E sem) {
+        if (find(e) != null) {
+            System.out.println(
+                "Error inserting. A record with this ID exists.");
+        }
+        insertHelp(root, e, sem);
+        nodeCount++;
+    }
+
+
+    private BSTNode<KVPair<K, E>> findKeywordHelp(
+        BSTNode<KVPair<K, E>> root,
+        String key) {
+        if (root == null) {
+            return null;
+        }
+        else if (key.contains((String)root.value().value())) {
+            findKeywordHelp(root.left(), key);
+            findKeywordHelp(root.right(), key);
+            return root;
+        }
+        else {
+            findKeywordHelp(root.left(), key);
+            findKeywordHelp(root.right(), key);
+            return null;
+        }
+    }
+
+
+    public BSTNode<KVPair<K, E>> findKeyword(String key) {
+        return findKeywordHelp(root, key);
+    }
+    
+    public int isDuplicate(BSTNode<KVPair<K, E>> isSameNode) {
+        if (isSameNode.left() == null) {
+            return 0;
+        }
+        BSTNode<KVPair<K, E>> leftNode = isSameNode.left();
+        if (isSameNode.value().key() == leftNode.value().key()) {
+            return 1 + isDuplicate(leftNode);
+        }
+        else {
+            return 0;
+        }
     }
 }

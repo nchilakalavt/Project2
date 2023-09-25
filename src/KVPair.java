@@ -3,7 +3,10 @@ public class KVPair<K extends Comparable<K>, E>
     private K theKey; // The key
     private E theVal; // The value
     
-    
+//    public KVPair(K key, E val){
+//        theKey = key;
+//        theVal = val;
+//    }
     public int compareTo(KVPair<K, E> it) {
         return theKey.compareTo(it.key());
     }
@@ -22,4 +25,14 @@ public class KVPair<K extends Comparable<K>, E>
     public E value() {
         return theVal;
     }
+    
+    public void setKey(K newKey) {
+        theKey = newKey;
+    }
+    
+    public void setVal(E newVal) {
+        theVal = newVal;
+    }
+
+
 }
