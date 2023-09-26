@@ -32,16 +32,23 @@ public class SemDatabaseTest extends TestCase {
         semD.insert(mysem2);
         semD.insert(mysem3);
         semD.insert(mysem10);
-        Seminar[] semArr = { mysem1, mysem2, mysem3, mysem10 };
+        Seminar mysem11 = new Seminar(10, "Seminar Title", "2405231000", 75,
+        (short)15, (short)33, 9, keywords, "This is a great seminar");
+        Seminar mysem12 = new Seminar(10, "Seminar Title", "2405231000", 75,
+            (short)15, (short)33, 16, keywords, "This is a great seminar");
+        semD.insert(mysem11);
+        semD.insert(mysem12);
+        Seminar[] semArr = { mysem1, mysem2, mysem3, mysem10};
         System.out.println(semD.searchCost(10, 15));
     }
     
-    public void testIsDuplicate() {
+    public void testSearchKeyword() {
         semD.insert(mysem1);
         semD.insert(mysem2);
         semD.insert(mysem3);
         semD.insert(mysem10);
-        
+        System.out.println("\n");
+        System.out.println(semD.searchKeyword("Good"));
     }
 
 }

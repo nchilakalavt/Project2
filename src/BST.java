@@ -78,12 +78,23 @@ public class BST<K extends Comparable<K>, E> {
         }
         else if (root.value().compareTo(e) == 0 || root.value().compareTo(
             e) > 0) {
-            root.setLeft(rootLeftRight);
-            insertHelp(rootLeftRight, e, sem);
+            if (root.left() == null) {
+                root.setLeft(rootLeftRight);
+                insertHelp(rootLeftRight, e, sem);
+            }
+            else {
+                insertHelp(root.left(), e, sem);
+            }
         }
         else {
-            root.setRight(rootLeftRight);
-            insertHelp(rootLeftRight, e, sem);
+            if (root.right() == null) {
+                root.setRight(rootLeftRight);
+                insertHelp(rootLeftRight, e, sem);
+            }
+            else {
+                insertHelp(root.right(), e, sem);
+            }
+
         }
     }
 
@@ -188,27 +199,6 @@ public class BST<K extends Comparable<K>, E> {
         return retString;
     }
 
-// public BST findDupExact(BSTNode<KVPair<K, E>> compareNode,
-// K e) {
-//
-// if (compareNode == null || compareNode.value() == null) {
-// return null;
-// }
-// if (compareNode.value().compareTo(e) == 0) {
-// duplicateTree.insert(e, compareNode.value().value());
-// findDupExact(compareNode.left(), e);
-// findDupExact(compareNode.right(), e);
-// }
-// else if (compareNode.value().compareTo(e) < 0) {
-// findDupExact(compareNode.left(), e);
-// }
-//
-// else if (compareNode.value().compareTo(e) > 0) {
-// findDupExact(compareNode.right(), e);
-// }
-// return null;
-// }
-
 
     public String findDupCost(
         BSTNode<KVPair<K, E>> compareNode,
@@ -245,4 +235,20 @@ public class BST<K extends Comparable<K>, E> {
             "", 0);
     }
 
+
+    public String findKeywords(
+        BSTNode<KVPair<K, E>> root,
+        String keyword,
+        String retString,
+        int index) {
+        if (root == null) {
+            return "";
+        }
+        if (((String)root.value().key()).contains(keyword)) {
+            retString += root.value().value().toString() + "\n";
+
+        }
+        return retString += findKeywords(root.left(), keyword, retString,
+            index++) + findKeywords(root.right(), keyword, retString, index++);
+    }
 }

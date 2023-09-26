@@ -17,7 +17,11 @@ public class SemDatabase {
         binSearchTreeID.idInsert(sem.id(), sem);
         binSearchTreeCost.insert(sem.cost(), sem);
         binSearchTreeDate.insert(sem.date(), sem);
-        binSearchTreeKey.insert(sem.keywords().toString(), sem);
+        String semKeyString = "";
+        for (int i = 0; i < sem.keywords().length; i++) {
+            semKeyString += sem.keywords()[i];
+        }
+        binSearchTreeKey.insert(semKeyString, sem);
     }
 
 
@@ -35,8 +39,8 @@ public class SemDatabase {
     }
 
 
-    public Seminar searchKeyword(String keyword) {
-        return binSearchTreeKey.findKeyword(keyword).value().value();
+    public String searchKeyword(String keyword) {
+        return binSearchTreeKey.findKeywords(binSearchTreeKey.getRoot(), keyword, "", 0);
     }
 
 
