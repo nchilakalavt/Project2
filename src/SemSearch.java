@@ -37,6 +37,7 @@ public class SemSearch {
      */
     public static void main(String[] args) {
         // This is the main file for the program.
-        Seminar dum = new Seminar();
+        CommandProcessor run = new CommandProcessor(args[0]);
+        run.parsing(args[1]);
     }
 }

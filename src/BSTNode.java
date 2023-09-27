@@ -5,17 +5,19 @@ public class BSTNode<E extends Comparable<? super E>> {
     private BSTNode right; // Pointer to right child
     private int duplicateCount = 1;
     private Object[] duplicateArray = new Object[duplicateCount];
+    private int level;
 
     // Constructors
     BSTNode() {
         left = right = null;
-        
+        level = 0;
     }
 
 
     BSTNode(E val) {
         left = right = null;
         element = val;
+        level = 0;
     }
 
 
@@ -23,6 +25,7 @@ public class BSTNode<E extends Comparable<? super E>> {
         left = l;
         right = r;
         element = val;
+        level = 0;
     }
 
 
@@ -83,5 +86,10 @@ public class BSTNode<E extends Comparable<? super E>> {
     public Object[] getDuplicates() {
         return duplicateArray;
     }
-    
+    public int getLevel() {
+        return level;
+    }
+    public void setLevel(int levelNum) {
+        level = levelNum;
+    }
 }

@@ -49,6 +49,7 @@ public class BST<K extends Comparable<K>, E> {
 
 
     private void reorder(BSTNode<KVPair<K, E>> removeNode) {
+
         if (removeNode.isLeaf()) {
             removeNode = null;
         }
@@ -57,7 +58,7 @@ public class BST<K extends Comparable<K>, E> {
             removeNode.right().setValue(null);
             reorder(removeNode.right());
         }
-        else {
+        else if (removeNode.right() == null) {
             removeNode.setValue(removeNode.left().value());
             removeNode.left().setValue(null);
             reorder(removeNode.left());
@@ -67,15 +68,14 @@ public class BST<K extends Comparable<K>, E> {
 
     private void insertHelp(BSTNode<KVPair<K, E>> root, K e, E sem) {
         BSTNode<KVPair<K, E>> rootLeftRight = new BSTNode<KVPair<K, E>>();
-        ;
-        if (root == null) {
-            root = new BSTNode<KVPair<K, E>>();
-        }
+
         if (root.value() == null) {
             root.setValue(new KVPair<K, E>());
             root.value().setKey(e);
             root.value().setVal(sem);
+            root.setLevel(root.getLevel() + 1);
         }
+
         else if (root.value().compareTo(e) == 0 || root.value().compareTo(
             e) > 0) {
             if (root.left() == null) {
@@ -118,65 +118,60 @@ public class BST<K extends Comparable<K>, E> {
     // Remove a record from the tree
     // key: The key value of record to remove
     // Returns the record removed, null if there is none.
-    public BSTNode<KVPair<K, E>> remove(K key) {
-        BSTNode<KVPair<K, E>> temp = findHelp(root, key); // First find it
-        if (temp != null) {
-            removeHelp(temp); // Now remove it
-            nodeCount--;
+    public E removeID(K key) {
+        if (nodeCount == 0) {
+            System.out.println("Tree is Empty");
+            return null;
         }
-        return temp;
+        BSTNode<KVPair<K, E>> removeNode = findHelp(root, key);// First find it
+
+        if (removeNode != null) {
+            E retVal = removeNode.value().value();
+            removeHelp(removeNode); // Now remove it
+            nodeCount--;
+            System.out.println("Record with ID " + key
+                + " successfully deleted from the database");
+            return retVal;
+        }
+        else {
+            System.out.println("Delete FAILED -- There is no record with ID "
+                + key);
+            return null;
+        }
     }
 
 
     // Return the record with key value k, null if none exists
     // key: The key value to find
-    public BSTNode<KVPair<K, E>> find(K key) {
-        return findHelp(root, key);
-    }
-
-
-    // Return the number of records in the dictionary
-    public int size() {
-        return nodeCount;
-    }
-
-
-    public void idInsert(K e, E sem) {
-        if (find(e) != null) {
-            System.out.println(
-                "Error inserting. A record with this ID exists.");
+    public void find(K key) {
+        if (nodeCount == 0) {
+            System.out.println("Search FAILED -- There is no record with ID "
+                + key);
+            return;
         }
-        insertHelp(root, e, sem);
-        nodeCount++;
-    }
-
-
-    private BSTNode<KVPair<K, E>> findKeywordHelp(
-        BSTNode<KVPair<K, E>> root,
-        String key) {
-        if (root == null) {
-            return null;
-        }
-        else if (key.contains((String)root.value().value())) {
-            findKeywordHelp(root.left(), key);
-            findKeywordHelp(root.right(), key);
-            return root;
+        BSTNode<KVPair<K, E>> findNode = findHelp(root, key);
+        if (findNode == null) {
+            System.out.println("There is no record with ID " + root.value()
+                .key());
         }
         else {
-            findKeywordHelp(root.left(), key);
-            findKeywordHelp(root.right(), key);
-            return null;
+            System.out.println("Found record with ID " + root.value().key());
+            System.out.println(root.value().value().toString());
         }
     }
 
 
-    public BSTNode<KVPair<K, E>> findKeyword(String key) {
-        return findKeywordHelp(root, key);
-    }
-
-
-    public int isDuplicate(BSTNode<KVPair<K, E>> isSameNode) {
-        return isSameNode.duplicateCount();
+    public boolean idInsert(K e, E sem) {
+        if (findHelp(root, e) != null) {
+            System.out.println(
+                "Error inserting. A record with this ID exists.");
+            return false;
+        }
+        else {
+            insertHelp(root, e, sem);
+            nodeCount++;
+            return true;
+        }
     }
 
 
@@ -185,70 +180,52 @@ public class BST<K extends Comparable<K>, E> {
     }
 
 
-    public String preOrderTraverseToString(
-        BSTNode<KVPair<K, E>> root,
-        String retString,
-        int index) {
+    public void traverseToString(BSTNode<KVPair<K, E>> root) {
 
-        if (root == null) {
-            return "";
+        if (root == null || root.value() == null) {
+            System.out.println("null");
         }
-        retString += root.value().value().toString() + "\n"
-            + preOrderTraverseToString(root.left(), retString, index++)
-            + preOrderTraverseToString(root.right(), retString, index++);
-        return retString;
+        else {
+            traverseToString(root.right());
+            System.out.println(root.value().key());
+            traverseToString(root.left());
+        }
+
     }
 
 
-    public String findDupCost(
-        BSTNode<KVPair<K, E>> compareNode,
-        BST<K, E> duplicateTree,
-        K low,
-        K high) {
+    public void printRange(BSTNode<KVPair<K, E>> root, K low, K high) {
+
+        if (root == null) {
+            return;
+        }
+        printRange(root.left(), low, high);
+        if (low.compareTo(root.value().key()) <= 0 && high.compareTo(root
+            .value().key()) >= 0) {
+            System.out.println(root.value().value().toString());
+        }
+        printRange(root.right(), low, high);
+    }
+
+
+    public void removeNotID(BSTNode<KVPair<K, E>> compareNode, E val) {
         if (compareNode == null || compareNode.value() == null) {
-            return null;
+            return;
         }
-        if (compareNode.value().compareTo(low) == 0) {
-            duplicateTree.insert(compareNode.value().key(), compareNode.value()
-                .value());
-            findDupCost(compareNode.left(), duplicateTree, low, high);
-            findDupCost(compareNode.right(), duplicateTree, low, high);
-        }
-        else if (compareNode.value().compareTo(high) == 0) {
-            duplicateTree.insert(compareNode.value().key(), compareNode.value()
-                .value());
-            findDupCost(compareNode.left(), duplicateTree, low, high);
-        }
-        else if (compareNode.value().compareTo(high) < 0 && compareNode.value()
-            .compareTo(low) > 0) {
-            duplicateTree.insert(compareNode.value().key(), compareNode.value()
-                .value());
-            findDupCost(compareNode.left(), duplicateTree, low, high);
-            findDupCost(compareNode.right(), duplicateTree, low, high);
-        }
+        else if (compareNode.value().value() == val) {
+            nodeCount--;
+            if (root.isLeaf()) {
+                BSTNode<KVPair<K, E>> temp = root;
+                root = null;
+            }
+            else {
 
-        else if (compareNode.value().compareTo(high) > 0 || compareNode.value()
-            .compareTo(low) < 0) {
-            findDupCost(compareNode.left(), duplicateTree, low, high);
+                root.setValue(null);
+                reorder(root);
+            }
         }
-        return duplicateTree.preOrderTraverseToString(duplicateTree.getRoot(),
-            "", 0);
+        removeNotID(compareNode.left(), val);
+        removeNotID(compareNode.right(), val);
     }
 
-
-    public String findKeywords(
-        BSTNode<KVPair<K, E>> root,
-        String keyword,
-        String retString,
-        int index) {
-        if (root == null) {
-            return "";
-        }
-        if (((String)root.value().key()).contains(keyword)) {
-            retString += root.value().value().toString() + "\n";
-
-        }
-        return retString += findKeywords(root.left(), keyword, retString,
-            index++) + findKeywords(root.right(), keyword, retString, index++);
-    }
 }
