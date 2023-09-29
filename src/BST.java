@@ -217,7 +217,6 @@ public class BST<K extends Comparable<K>, E> {
     public void printRangeCount(K low, K high) {
         int count = 0;
         printRange(root, low, high, 0);
-        System.out.println(count + " nodes visited in this search");
     }
 
 }
