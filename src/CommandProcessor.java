@@ -28,7 +28,7 @@ public class CommandProcessor {
      */
     public void parsing(String filename) {
         try {
-            SemDatabase semdata = new SemDatabase(worldSize);
+            SemDatabase semData = new SemDatabase(worldSize);
             Scanner sc = new Scanner(new File(filename));
             while (sc.hasNext()) {
                 String cmd = sc.next();
@@ -54,55 +54,61 @@ public class CommandProcessor {
                         desc = sc.nextLine().trim();
                         Seminar sem = new Seminar(id, title, date, length, x, y,
                             cost, keywords, desc);
+                        semData.insert(sem);
                         break;
                     case "search":
                         String command = sc.next();
                         if (command.equals("ID")) {
                             int searchId = sc.nextInt();
+                            semData.searchID(searchId);
                         }
                         else if (command.equals("cost")) {
                             int lowEnd = sc.nextInt();
                             int highEnd = sc.nextInt();
+                            semData.searchCost(lowEnd, highEnd);
                         }
                         else if (command.equals("date")) {
-                            int startDate = sc.nextInt();
-                            int endDate = sc.nextInt();
+                            String startDate = sc.next();
+                            String endDate = sc.next();
+                            semData.searchDate(startDate, endDate);
 
                         }
                         else if (command.equals("keyword")) {
                             String s = sc.nextLine().trim();
+                            semData.searchKeyword(s);
                         }
                         else if (command.equals("location")) {
                             int startDate = sc.nextInt();
                             int endDate = sc.nextInt();
                             double radius = sc.nextDouble();
                         }
-                        else {
-                            break;
-                        }
-                        // break;
+                        break;
+
+
                     case "delete":
                         id = sc.nextInt();
-                        semdata.delete(id);
+                        semData.delete(id);
                         break;
                     case "print":
                         String command2 = sc.next();
                         if (command2.equals("ID")) {
-
+                            semData.printID();
                         }
                         else if (command2.equals("cost")) {
-
+                            semData.printCost();
                         }
                         else if (command2.equals("date")) {
+                            semData.printDate();
                         }
                         else if (command2.equals("keyword")) {
+                            semData.printKeyword();
                         }
                         else if (command2.equals("location")) {
                         }
 
                         break;
                     default:
-                        System.out.println("Unrecognized input " + cmd);
+                        System.out.println("Unrecognized input: " + cmd);
                         break;
                 }
             }

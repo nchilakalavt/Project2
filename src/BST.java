@@ -16,53 +16,81 @@ public class BST<K extends Comparable<K>, E> {
     }
 
 
-    private BSTNode<KVPair<K, E>> findHelp(
+    public BSTNode<KVPair<K, E>> findHelp(
         BSTNode<KVPair<K, E>> compareNode,
         K e) {
+        BSTNode<KVPair<K, E>> retNode = null;
         if (compareNode == null || compareNode.value() == null) {
             return null;
         }
-        if (compareNode.value().compareTo(e) == 0) {
+        else if (compareNode.value().compareTo(e) == 0) {
             return compareNode;
         }
-        else if (compareNode.value().compareTo(e) < 0) {
-            findHelp(compareNode.left(), e);
+        else if (compareNode.value().compareTo(e) > 0) {
+            return (findHelp(compareNode.left(), e));
         }
 
-        else if (compareNode.value().compareTo(e) > 0) {
-            findHelp(compareNode.right(), e);
+        else {
+            return (findHelp(compareNode.right(), e));
         }
-        return null;
+
     }
 
-
-    private void removeHelp(BSTNode<KVPair<K, E>> root) {
-        if (root.isLeaf()) {
-            BSTNode<KVPair<K, E>> temp = root;
-            root = null;
+    public void remove(K key, E val) {
+        BSTNode<KVPair<K, E>> temp = findHelp(root, key); // First find it
+        if (temp != null) {
+          root = removeHelp(root, key, val); // Now remove it
+          nodeCount--;
+        }
+      }
+    
+    private BSTNode<KVPair<K, E>> removeHelp(
+        BSTNode<KVPair<K, E>> root,
+        K key, E value) {
+        if (root == null) {
+            return null;
+        }
+        if (root.value().compareTo(key) > 0) {
+            root.setLeft(removeHelp(root.left(), key, value));
+        }
+        else if (root.value().compareTo(key) < 0) {
+            root.setRight(removeHelp(root.left(), key, value));
         }
         else {
-            root.setValue(null);
-            reorder(root);
+            if (root.value().value() != value) {
+                root.setLeft(removeHelp(root.left(), key, value));
+            }
+            else if (root.isLeaf()) {
+                
+            }
+            else if (root.left() == null) {
+                return root.right();
+            }
+            else if (root.right() == null) {
+                return root.left();
+            }
+            else {
+                root.setValue(getMax(root.left()).value());
+                root.setLeft(deleteMax(root.left()));
+            }
         }
+        return root;
     }
 
 
-    private void reorder(BSTNode<KVPair<K, E>> removeNode) {
+    private BSTNode<KVPair<K, E>> getMax(BSTNode rt) {
+        if (rt.right() == null)
+            return rt;
+        return getMax(rt.right());
+    }
 
-        if (removeNode.isLeaf()) {
-            removeNode = null;
+
+    private BSTNode<KVPair<K, E>> deleteMax(BSTNode<KVPair<K, E>> rt) {
+        if (rt.right() == null) {
+            return rt.left();
         }
-        else if (removeNode.left() == null) {
-            removeNode.setValue(removeNode.right().value());
-            removeNode.right().setValue(null);
-            reorder(removeNode.right());
-        }
-        else if (removeNode.right() == null) {
-            removeNode.setValue(removeNode.left().value());
-            removeNode.left().setValue(null);
-            reorder(removeNode.left());
-        }
+        rt.setRight(deleteMax(rt.right()));
+        return rt;
     }
 
 
@@ -115,32 +143,6 @@ public class BST<K extends Comparable<K>, E> {
     }
 
 
-    // Remove a record from the tree
-    // key: The key value of record to remove
-    // Returns the record removed, null if there is none.
-    public E removeID(K key) {
-        if (nodeCount == 0) {
-            System.out.println("Tree is Empty");
-            return null;
-        }
-        BSTNode<KVPair<K, E>> removeNode = findHelp(root, key);// First find it
-
-        if (removeNode != null) {
-            E retVal = removeNode.value().value();
-            removeHelp(removeNode); // Now remove it
-            nodeCount--;
-            System.out.println("Record with ID " + key
-                + " successfully deleted from the database");
-            return retVal;
-        }
-        else {
-            System.out.println("Delete FAILED -- There is no record with ID "
-                + key);
-            return null;
-        }
-    }
-
-
     // Return the record with key value k, null if none exists
     // key: The key value to find
     public void find(K key) {
@@ -155,7 +157,7 @@ public class BST<K extends Comparable<K>, E> {
                 .key());
         }
         else {
-            System.out.println("Found record with ID " + root.value().key());
+            System.out.println("Found record with ID " + key + ":");
             System.out.println(root.value().value().toString());
         }
     }
@@ -164,7 +166,7 @@ public class BST<K extends Comparable<K>, E> {
     public boolean idInsert(K e, E sem) {
         if (findHelp(root, e) != null) {
             System.out.println(
-                "Error inserting. A record with this ID exists.");
+                "Insert FAILED - There is already a record with ID " + e);
             return false;
         }
         else {
@@ -194,38 +196,28 @@ public class BST<K extends Comparable<K>, E> {
     }
 
 
-    public void printRange(BSTNode<KVPair<K, E>> root, K low, K high) {
+    public void printRange(
+        BSTNode<KVPair<K, E>> root,
+        K low,
+        K high,
+        int count) {
+        if (root != null) {
 
-        if (root == null) {
-            return;
+            printRange(root.left(), low, high, count++);
+            if (low.compareTo(root.value().key()) <= 0 && high.compareTo(root
+                .value().key()) >= 0) {
+                System.out.println(root.value().value().toString());
+                count++;
+            }
+            printRange(root.right(), low, high, count++);
         }
-        printRange(root.left(), low, high);
-        if (low.compareTo(root.value().key()) <= 0 && high.compareTo(root
-            .value().key()) >= 0) {
-            System.out.println(root.value().value().toString());
-        }
-        printRange(root.right(), low, high);
     }
 
 
-    public void removeNotID(BSTNode<KVPair<K, E>> compareNode, E val) {
-        if (compareNode == null || compareNode.value() == null) {
-            return;
-        }
-        else if (compareNode.value().value() == val) {
-            nodeCount--;
-            if (root.isLeaf()) {
-                BSTNode<KVPair<K, E>> temp = root;
-                root = null;
-            }
-            else {
-
-                root.setValue(null);
-                reorder(root);
-            }
-        }
-        removeNotID(compareNode.left(), val);
-        removeNotID(compareNode.right(), val);
+    public void printRangeCount(K low, K high) {
+        int count = 0;
+        printRange(root, low, high, 0);
+        System.out.println(count + " nodes visited in this search");
     }
 
 }

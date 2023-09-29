@@ -3,6 +3,10 @@ public class KVPair<K extends Comparable<K>, E>
     private K theKey; // The key
     private E theVal; // The value
     
+    KVPair(){
+        theKey = null;
+        theVal = null;
+    }
     
     public int compareTo(KVPair<K, E> it) {
         return theKey.compareTo(it.key());

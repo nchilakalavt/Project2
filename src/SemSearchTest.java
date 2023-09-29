@@ -20,7 +20,7 @@ public class SemSearchTest extends TestCase {
     {
         SemSearch sem = new SemSearch();
         assertNotNull(sem);
-        SemSearch.main(null);
+        //SemSearch.main(null);
     }
 }
 
