@@ -78,7 +78,7 @@ public class SemDatabaseTest extends TestCase {
             + "ID: 3, Title: Seminar Title\r\n"
             + "Date: 2405231000, Length: 75, X: 15, Y: 33, Cost: 15\r\n"
             + "Description: This is a great seminar\r\n"
-            + "Keywords: HCI, Computer_Science, VT, Virginia_Tech\r\n0 nodes visited in this search\r\n";
+            + "Keywords: HCI, Computer_Science, VT, Virginia_Tech\r\n";
         assertEquals(temp, check);
     }
 
@@ -137,7 +137,7 @@ public class SemDatabaseTest extends TestCase {
             + "ID: 1, Title: Seminar Title\r\n"
             + "Date: 2405231000, Length: 75, X: 15, Y: 33, Cost: 10\r\n"
             + "Description: This is a great seminar\r\n"
-            + "Keywords: HCI, Computer_Science, VT, Virginia_Tech\n0 nodes visited in this search\r\n";
+            + "Keywords: HCI, Computer_Science, VT, Virginia_Tech\n";
         assertEquals(temp, check);
     }
 
