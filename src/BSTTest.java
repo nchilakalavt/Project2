@@ -3,7 +3,10 @@ import student.TestCase;
 
 public class BSTTest extends TestCase {
     private BST tree = new BST();
+<<<<<<< HEAD
     private BST bst = new BST();
+=======
+>>>>>>> 9ce8b143f432a29d5c1553aec10f707711f560e1
     private String[] keywords = { "Good", "Bad", "Ugly" };
     private Seminar sem1 = new Seminar(1, "Seminar Title", "2405231000", 75,
         (short)15, (short)33, 10, keywords, "This is a great seminar");
@@ -16,6 +19,7 @@ public class BSTTest extends TestCase {
     private BSTNode<KVPair<Integer, Seminar>> root =
         new BSTNode<KVPair<Integer, Seminar>>();
 
+<<<<<<< HEAD
     public void testInsert() {
         tree.insert(10, sem1);
         tree.insert(9, sem2);
@@ -130,4 +134,23 @@ public class BSTTest extends TestCase {
        assertEquals(bst.getNodeCount(), 0);
    }
    
+=======
+    public void testExtra() {
+    }
+
+    public void testRemoveID() {
+        tree.insert(10, sem1);
+        tree.remove(10, sem1);
+        tree.remove(30, sem1);
+        tree.insert(15, sem2);
+        tree.insert(13, sem3);
+        tree.insert(19, sem10);
+        //assertEquals(tree.removeID(30), null);
+        //assertFalse(tree.idInsert(15, sem1));
+
+    }
+   public void testTraverseTostring() {
+
+   }
+>>>>>>> 9ce8b143f432a29d5c1553aec10f707711f560e1
 }
