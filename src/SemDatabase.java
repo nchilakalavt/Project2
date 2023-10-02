@@ -33,23 +33,28 @@ public class SemDatabase {
 
 
     public void searchID(int key) {
-
-        binSearchTreeID.find(key);
+        if (binSearchTreeID.find(key) != null) {
+            System.out.println("Found record with ID " + key + ":");
+            System.out.println(binSearchTreeID.find(key).value().value().toString());
+        }
+        else {
+            System.out.println("There is no record with ID " + key);
+        }
     }
 
 
     public void searchCost(int low, int high) {
         System.out.println("Seminars with costs in range " + low + " to " + high
             + ":");
-        binSearchTreeCost.printRangeCount(low, high);
+        binSearchTreeCost.printRange(low, high);
     }
 
 
     public void searchKeyword(String keyword) {
         System.out.println("Seminars matching keyword " + keyword + ":");
         if (binSearchTreeKey.getNodeCount() != 0) {
-            binSearchTreeKey.printRange(binSearchTreeKey.getRoot(), keyword,
-                keyword, 0);
+            binSearchTreeKey.printRange( keyword,
+                keyword);
         }
     }
 
@@ -57,14 +62,13 @@ public class SemDatabase {
     public void searchDate(String firstT, String secondT) {
         System.out.println("Seminars with dates in range " + firstT + " to "
             + secondT + ":");
-        binSearchTreeDate.printRangeCount(firstT, secondT);
+        binSearchTreeDate.printRange(firstT, secondT);
     }
 
 
     public void delete(int key) {
-        if (binSearchTreeID.findHelp(binSearchTreeID.getRoot(), key) != null) {
-            Seminar sem = binSearchTreeID.findHelp(binSearchTreeID.getRoot(),
-                key).value().value();
+        if (binSearchTreeID.find(key) != null) {
+            Seminar sem = binSearchTreeID.find(key).value().value();
             binSearchTreeID.remove(key, sem);
             binSearchTreeCost.remove(sem.cost(), sem);
             binSearchTreeDate.remove(sem.date(), sem);
@@ -86,7 +90,7 @@ public class SemDatabase {
             System.out.println("This tree is empty");
         }
         else {
-            binSearchTreeDate.traverseToString(binSearchTreeDate.getRoot());
+            binSearchTreeDate.print();
             System.out.println("Number of records: " + binSearchTreeDate
                 .getNodeCount());
 
@@ -101,7 +105,7 @@ public class SemDatabase {
             System.out.println("This tree is empty");
         }
         else {
-            binSearchTreeKey.traverseToString(binSearchTreeKey.getRoot());
+            binSearchTreeKey.print();
             System.out.println("Number of records: " + binSearchTreeKey
                 .getNodeCount());
         }
@@ -115,7 +119,7 @@ public class SemDatabase {
             System.out.println("This tree is empty");
         }
         else {
-            binSearchTreeCost.traverseToString(binSearchTreeCost.getRoot());
+            binSearchTreeCost.print();
             System.out.println("Number of records: " + binSearchTreeCost
                 .getNodeCount());
         }
@@ -128,7 +132,7 @@ public class SemDatabase {
             System.out.println("This tree is empty");
         }
         else {
-            binSearchTreeID.traverseToString(binSearchTreeID.getRoot());
+            binSearchTreeID.print();
             System.out.println("Number of records: " + binSearchTreeID
                 .getNodeCount());
         }

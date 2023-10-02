@@ -1,8 +1,8 @@
 
 public class BSTNode<E extends Comparable<? super E>> {
     private E element;
-    private BSTNode left; // Pointer to left child
-    private BSTNode right; // Pointer to right child
+    private BSTNode<E> left; // Pointer to left child
+    private BSTNode<E> right; // Pointer to right child
     private int level;
 
     // Constructors
@@ -19,7 +19,7 @@ public class BSTNode<E extends Comparable<? super E>> {
     }
 
 
-    BSTNode(E val, BSTNode l, BSTNode r) {
+    BSTNode(E val, BSTNode<E> l, BSTNode<E> r) {
         left = l;
         right = r;
         element = val;
@@ -47,23 +47,23 @@ public class BSTNode<E extends Comparable<? super E>> {
 
 
     // Get and set the left child
-    public BSTNode left() {
+    public BSTNode<E> left() {
         return left;
     }
     
 
-    public void setLeft(BSTNode p) {
+    public void setLeft(BSTNode<E> p) {
         left = p;
     }
 
 
     // Get and set the right child
-    public BSTNode right() {
+    public BSTNode<E> right() {
         return right;
     }
 
 
-    public void setRight(BSTNode p) {
+    public void setRight(BSTNode<E> p) {
         right = p;
     }
 

@@ -25,6 +25,14 @@ public class SemDatabaseTest extends TestCase {
             (short)15, (short)33, 125, keywords, "This is a great seminar");
         semD.insert(mysemDupID);
         System.out.println();
+        semD.insert(new Seminar(1, "Seminar Title", "2405231000", 75,
+        (short)-1, (short)33, 10, keywords, "This is a great seminar"));
+        semD.insert(new Seminar(1, "Seminar Title", "2405231000", 75,
+            (short)1, (short)-1, 10, keywords, "This is a great seminar"));
+        semD.insert(new Seminar(1, "Seminar Title", "2405231000", 75,
+            (short)1, (short)128, 10, keywords, "This is a great seminar"));
+        semD.insert(new Seminar(1, "Seminar Title", "2405231000", 75,
+            (short)128, (short)33, 10, keywords, "This is a great seminar"));
     }
 
 
@@ -43,7 +51,7 @@ public class SemDatabaseTest extends TestCase {
         systemOut().clearHistory();
         semD.searchID(2);
         String temp2 = systemOut().getHistory();
-        String check2 = "There is no record with ID 1\n";
+        String check2 = "There is no record with ID 2\n";
         assertEquals(temp2, check2);
     }
 
@@ -114,6 +122,7 @@ public class SemDatabaseTest extends TestCase {
 
 
     public void testSearchDate() {
+        
         semD.insert(mysem1);
         semD.insert(mysem2);
         semD.insert(mysem3);
@@ -143,6 +152,7 @@ public class SemDatabaseTest extends TestCase {
 
 
     public void testPrintDate() {
+        semD.printDate();
         semD.insert(mysem1);
         semD.insert(mysem2);
         semD.insert(mysem3);
@@ -163,6 +173,24 @@ public class SemDatabaseTest extends TestCase {
         semD.delete(3);
         semD.delete(10);
     }
+    
+    public void testPrintCost() {
+        semD.printCost();
+        semD.insert(mysem1);
+        semD.insert(mysem2);
+        semD.insert(mysem3);
+        semD.insert(mysem10);
+        semD.printCost();
+    }
+    public void testPrintKeyword() {
+        semD.printKeyword();
+        semD.insert(mysem1);
+        semD.insert(mysem2);
+        semD.insert(mysem3);
+        semD.insert(mysem10);
+        semD.printKeyword();
+    }
+
 
 
     public void testAll() {
